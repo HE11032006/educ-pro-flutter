@@ -3,6 +3,8 @@ import { Navigation } from "@/components/Navigation";
 import { Dashboard } from "@/components/Dashboard";
 import { GradesSection } from "@/components/GradesSection";
 import { ScheduleSection } from "@/components/ScheduleSection";
+import { MessageCenter } from "@/components/messages/MessageCenter";
+import { ProfileSection } from "@/components/ProfileSection";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
@@ -22,11 +24,11 @@ const Index = () => {
       case "announcements":
         return <div className="p-8 text-center text-muted-foreground">Section Annonces - En cours de développement</div>;
       case "messages":
-        return <div className="p-8 text-center text-muted-foreground">Section Messages - En cours de développement</div>;
+        return <MessageCenter />;
       case "reports":
         return <div className="p-8 text-center text-muted-foreground">Section Bulletins - En cours de développement</div>;
       case "profile":
-        return <div className="p-8 text-center text-muted-foreground">Section Profil - En cours de développement</div>;
+        return <ProfileSection />;
       default:
         return <Dashboard />;
     }
