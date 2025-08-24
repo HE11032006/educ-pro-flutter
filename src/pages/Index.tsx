@@ -3,6 +3,8 @@ import { Navigation } from "@/components/Navigation";
 import { Dashboard } from "@/components/Dashboard";
 import { GradesSection } from "@/components/GradesSection";
 import { ScheduleSection } from "@/components/ScheduleSection";
+import { AttendanceSection } from "@/components/AttendanceSection";
+import { ResourcesSection } from "@/components/ResourcesSection";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
@@ -16,9 +18,9 @@ const Index = () => {
       case "schedule":
         return <ScheduleSection />;
       case "attendance":
-        return <div className="p-8 text-center text-muted-foreground">Section Présence - En cours de développement</div>;
+        return <AttendanceSection />;
       case "resources":
-        return <div className="p-8 text-center text-muted-foreground">Section Ressources - En cours de développement</div>;
+        return <ResourcesSection />;
       case "announcements":
         return <div className="p-8 text-center text-muted-foreground">Section Annonces - En cours de développement</div>;
       case "messages":
