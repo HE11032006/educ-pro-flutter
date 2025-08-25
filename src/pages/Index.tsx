@@ -6,6 +6,9 @@ import { ScheduleSection } from "@/components/ScheduleSection";
 import { AttendanceSection } from "@/components/AttendanceSection";
 import { ResourcesSection } from "@/components/ResourcesSection";
 import { AnnouncementsSection } from "@/components/AnnouncementsSection";
+import { MessagesSection } from "@/components/MessagesSection";
+import { ReportsSection } from "@/components/ReportsSection";
+import { ProfileSection } from "@/components/ProfileSection";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
@@ -25,11 +28,11 @@ const Index = () => {
       case "announcements":
         return <AnnouncementsSection />;
       case "messages":
-        return <div className="p-8 text-center text-muted-foreground">Section Messages - En cours de développement</div>;
+        return <MessagesSection />;
       case "reports":
-        return <div className="p-8 text-center text-muted-foreground">Section Bulletins - En cours de développement</div>;
+        return <ReportsSection />;
       case "profile":
-        return <div className="p-8 text-center text-muted-foreground">Section Profil - En cours de développement</div>;
+        return <ProfileSection />;
       default:
         return <Dashboard />;
     }
