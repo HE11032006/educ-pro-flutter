@@ -2,20 +2,15 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { 
   Calendar, 
   Clock, 
-  Plus, 
-  Edit,
-  Trash2,
-  Save,
+  MapPin, 
+  User,
+  ChevronLeft,
+  ChevronRight,
   BookOpen,
-  Users,
-  MapPin
+  Users
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -25,29 +20,27 @@ const timeSlots = [
   "13:00", "14:00", "15:00", "16:00", "17:00"
 ];
 
-const classes = ["Première année B1", "Première année B2", "Deuxième année A1", "Deuxième année A2"];
-const subjects = ["Mathématiques", "Physique", "Français", "Histoire", "Anglais", "Philosophie", "SVT"];
-const teachers = ["M. Dupont", "Mme Martin", "Mme Durand", "M. Moreau", "Miss Smith", "M. Bernard", "M. Lopez"];
-const rooms = ["A203", "B101", "C205", "A105", "D302", "B102", "Gymnase"];
-
-type ScheduleItem = {
-  id: string;
-  day: string;
-  time: string;
-  subject: string;
-  teacher: string;
-  room: string;
-  class: string;
-  type: "cours" | "tp" | "td" | "oral" | "sport";
+const schedule = {
+  "Lundi": [
+    { time: "08:00-09:00", subject: "Mathématiques", teacher: "M. Dupont", room: "A203", type: "cours" },
+    { time: "09:00-10:00", subject: "Mathématiques", teacher: "M. Dupont", room: "A203", type: "cours" },
+    { time: "10:15-11:15", subject: "Physique", teacher: "Mme Martin", room: "B101", type: "tp" },
+    { time: "11:15-12:15", subject: "Français", teacher: "Mme Durand", room: "C205", type: "cours" },
+    { time: "14:00-15:00", subject: "Histoire", teacher: "M. Moreau", room: "A105", type: "cours" },
+    { time: "15:00-16:00", subject: "Anglais", teacher: "Miss Smith", room: "D302", type: "oral" },
+  ],
+  "Mardi": [
+    { time: "08:00-09:00", subject: "Physique", teacher: "Mme Martin", room: "B101", type: "cours" },
+    { time: "09:00-10:00", subject: "Chimie", teacher: "M. Bernard", room: "B102", type: "tp" },
+    { time: "10:15-11:15", subject: "Mathématiques", teacher: "M. Dupont", room: "A203", type: "td" },
+    { time: "11:15-12:15", subject: "Sport", teacher: "M. Lopez", room: "Gymnase", type: "sport" },
+    { time: "14:00-15:00", subject: "Français", teacher: "Mme Durand", room: "C205", type: "cours" },
+    { time: "15:00-16:00", subject: "Géographie", teacher: "M. Moreau", room: "A105", type: "cours" },
+  ],
+  // Ajoutez plus de jours si nécessaire...
 };
 
-// Données d'exemple de l'emploi du temps
-const initialScheduleData: ScheduleItem[] = [
-  { id: "1", day: "Lundi", time: "08:00-09:00", subject: "Mathématiques", teacher: "M. Dupont", room: "A203", class: "Première année B1", type: "cours" },
-  { id: "2", day: "Lundi", time: "09:00-10:00", subject: "Physique", teacher: "Mme Martin", room: "B101", class: "Première année B1", type: "tp" },
-  { id: "3", day: "Mardi", time: "08:00-09:00", subject: "Français", teacher: "Mme Durand", room: "C205", class: "Première année B2", type: "cours" },
-  { id: "4", day: "Mercredi", time: "10:00-11:00", subject: "Histoire", teacher: "M. Moreau", room: "A105", class: "Deuxième année A1", type: "cours" },
-];
+const today = "Lundi"; // Simulation du jour actuel
 
 const getSubjectColor = (type: string) => {
   const colors = {
@@ -61,320 +54,198 @@ const getSubjectColor = (type: string) => {
 };
 
 export const ScheduleSection = () => {
-  const [scheduleData, setScheduleData] = useState<ScheduleItem[]>(initialScheduleData);
-  const [selectedClass, setSelectedClass] = useState("all");
-  const [editingItem, setEditingItem] = useState<ScheduleItem | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [newItem, setNewItem] = useState<Partial<ScheduleItem>>({
-    day: "Lundi",
-    time: "08:00-09:00",
-    subject: "",
-    teacher: "",
-    room: "",
-    class: "",
-    type: "cours"
+  const [currentWeek, setCurrentWeek] = useState(0);
+  const [selectedDay, setSelectedDay] = useState(today);
+
+  const nextClass = schedule[today]?.find(cls => {
+    const [startTime] = cls.time.split("-");
+    const currentTime = new Date().getHours() + ":" + new Date().getMinutes();
+    return startTime > currentTime;
   });
-
-  // Filtrer par classe
-  const filteredSchedule = scheduleData.filter(item => 
-    selectedClass === "all" || item.class === selectedClass
-  );
-
-  const handleAddCourse = () => {
-    if (newItem.day && newItem.time && newItem.subject && newItem.teacher && newItem.room && newItem.class) {
-      const id = Date.now().toString();
-      setScheduleData(prev => [...prev, { ...newItem, id } as ScheduleItem]);
-      setNewItem({
-        day: "Lundi",
-        time: "08:00-09:00",
-        subject: "",
-        teacher: "",
-        room: "",
-        class: "",
-        type: "cours"
-      });
-      setIsDialogOpen(false);
-    }
-  };
-
-  const handleEditCourse = (item: ScheduleItem) => {
-    setEditingItem(item);
-    setNewItem(item);
-    setIsDialogOpen(true);
-  };
-
-  const handleUpdateCourse = () => {
-    if (editingItem && newItem.day && newItem.time && newItem.subject && newItem.teacher && newItem.room && newItem.class) {
-      setScheduleData(prev => prev.map(item => 
-        item.id === editingItem.id ? { ...newItem, id: editingItem.id } as ScheduleItem : item
-      ));
-      setEditingItem(null);
-      setNewItem({
-        day: "Lundi",
-        time: "08:00-09:00",
-        subject: "",
-        teacher: "",
-        room: "",
-        class: "",
-        type: "cours"
-      });
-      setIsDialogOpen(false);
-    }
-  };
-
-  const handleDeleteCourse = (id: string) => {
-    setScheduleData(prev => prev.filter(item => item.id !== id));
-  };
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
+          <h1 className="text-3xl font-bold flex items-center gap-3">
             <Calendar className="h-8 w-8 text-primary" />
-            Gestion des Emplois du Temps
+            Emploi du temps
           </h1>
-          <p className="text-muted-foreground">
-            Créez et modifiez les emplois du temps par classe
+          <p className="text-muted-foreground mt-1">
+            Votre planning de la semaine
           </p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={() => setEditingItem(null)}>
-              <Plus className="h-4 w-4 mr-2" />
-              Ajouter un cours
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>{editingItem ? "Modifier le cours" : "Ajouter un cours"}</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="day">Jour</Label>
-                  <Select value={newItem.day} onValueChange={(value) => setNewItem(prev => ({ ...prev, day: value }))}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {weekDays.map(day => (
-                        <SelectItem key={day} value={day}>{day}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="time">Horaire</Label>
-                  <Select value={newItem.time} onValueChange={(value) => setNewItem(prev => ({ ...prev, time: value }))}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="08:00-09:00">08h00-09h00</SelectItem>
-                      <SelectItem value="09:00-10:00">09h00-10h00</SelectItem>
-                      <SelectItem value="10:00-11:00">10h00-11h00</SelectItem>
-                      <SelectItem value="11:00-12:00">11h00-12h00</SelectItem>
-                      <SelectItem value="14:00-15:00">14h00-15h00</SelectItem>
-                      <SelectItem value="15:00-16:00">15h00-16h00</SelectItem>
-                      <SelectItem value="16:00-17:00">16h00-17h00</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              
-              <div>
-                <Label htmlFor="subject">Matière</Label>
-                <Select value={newItem.subject} onValueChange={(value) => setNewItem(prev => ({ ...prev, subject: value }))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Choisir une matière" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {subjects.map(subject => (
-                      <SelectItem key={subject} value={subject}>{subject}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label htmlFor="teacher">Professeur</Label>
-                <Select value={newItem.teacher} onValueChange={(value) => setNewItem(prev => ({ ...prev, teacher: value }))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Choisir un professeur" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {teachers.map(teacher => (
-                      <SelectItem key={teacher} value={teacher}>{teacher}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="room">Salle</Label>
-                  <Select value={newItem.room} onValueChange={(value) => setNewItem(prev => ({ ...prev, room: value }))}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Salle" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {rooms.map(room => (
-                        <SelectItem key={room} value={room}>{room}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="type">Type</Label>
-                  <Select value={newItem.type} onValueChange={(value) => setNewItem(prev => ({ ...prev, type: value as any }))}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="cours">Cours</SelectItem>
-                      <SelectItem value="tp">TP</SelectItem>
-                      <SelectItem value="td">TD</SelectItem>
-                      <SelectItem value="oral">Oral</SelectItem>
-                      <SelectItem value="sport">Sport</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div>
-                <Label htmlFor="class">Classe</Label>
-                <Select value={newItem.class} onValueChange={(value) => setNewItem(prev => ({ ...prev, class: value }))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Choisir une classe" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {classes.map(className => (
-                      <SelectItem key={className} value={className}>{className}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <Button 
-                onClick={editingItem ? handleUpdateCourse : handleAddCourse} 
-                className="w-full"
-              >
-                {editingItem ? "Modifier" : "Ajouter"}
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" size="sm">
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-sm font-medium">Semaine du 15-19 Janvier 2024</span>
+          <Button variant="outline" size="sm">
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <BookOpen className="h-8 w-8 text-primary" />
+      {/* Next Class Card */}
+      {nextClass && (
+        <Card className="bg-gradient-to-r from-primary/5 to-primary-glow/5 border-primary/20">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold">{scheduleData.length}</p>
-                <p className="text-sm text-muted-foreground">Cours planifiés</p>
+                <Badge className="mb-2">Prochain cours</Badge>
+                <h3 className="text-xl font-bold">{nextClass.subject}</h3>
+                <p className="text-muted-foreground">
+                  {nextClass.time} • {nextClass.teacher} • Salle {nextClass.room}
+                </p>
+              </div>
+              <div className="text-right">
+                <div className="p-3 rounded-xl bg-primary/10 mb-2">
+                  <Clock className="h-6 w-6 text-primary" />
+                </div>
+                <p className="text-sm text-muted-foreground">Dans 15 min</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        
-        {classes.map((className) => {
-          const count = scheduleData.filter(s => s.class === className).length;
-          return (
-            <Card key={className}>
-              <CardContent className="p-4">
-                <div>
-                  <p className="text-2xl font-bold">{count}</p>
-                  <p className="text-sm text-muted-foreground">{className}</p>
+      )}
+
+      {/* Day Selection (Mobile) */}
+      <div className="md:hidden">
+        <div className="flex gap-2 overflow-x-auto pb-2">
+          {weekDays.map((day) => (
+            <Button
+              key={day}
+              variant={selectedDay === day ? "default" : "outline"}
+              size="sm"
+              className="min-w-fit"
+              onClick={() => setSelectedDay(day)}
+            >
+              {day}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      {/* Schedule Grid - Desktop */}
+      <Card className="hidden md:block">
+        <CardHeader>
+          <CardTitle>Planning hebdomadaire</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-6 gap-4">
+            {/* Time column */}
+            <div className="space-y-4">
+              <div className="h-12"></div> {/* Header space */}
+              {timeSlots.map((time) => (
+                <div key={time} className="h-16 flex items-center">
+                  <span className="text-sm text-muted-foreground font-medium">{time}</span>
                 </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+              ))}
+            </div>
 
-      {/* Filtre par classe */}
-      <div className="flex gap-4">
-        <Select value={selectedClass} onValueChange={setSelectedClass}>
-          <SelectTrigger className="w-48">
-            <SelectValue placeholder="Filtrer par classe" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Toutes les classes</SelectItem>
-            {classes.map((className) => (
-              <SelectItem key={className} value={className}>
-                {className}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Planning par jour */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        {weekDays.map((day) => {
-          const daySchedule = filteredSchedule.filter(item => item.day === day);
-          
-          return (
-            <Card key={day}>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center justify-between">
-                  {day}
-                  <Badge variant="outline">{daySchedule.length}</Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {daySchedule.map((item) => (
-                  <Card key={item.id} className={cn("p-3 border", getSubjectColor(item.type))}>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <Badge variant="outline" className="text-xs">
-                          {item.time}
-                        </Badge>
-                        <div className="flex gap-1">
-                          <Button 
-                            size="sm" 
-                            variant="ghost" 
-                            className="h-6 w-6 p-0"
-                            onClick={() => handleEditCourse(item)}
-                          >
-                            <Edit className="h-3 w-3" />
-                          </Button>
-                          <Button 
-                            size="sm" 
-                            variant="ghost" 
-                            className="h-6 w-6 p-0 text-destructive"
-                            onClick={() => handleDeleteCourse(item.id)}
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </Button>
-                        </div>
-                      </div>
-                      <div>
-                        <p className="font-medium text-sm">{item.subject}</p>
-                        <p className="text-xs text-muted-foreground">{item.class}</p>
-                      </div>
-                      <div className="space-y-1 text-xs text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <Users className="h-3 w-3" />
-                          {item.teacher}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <MapPin className="h-3 w-3" />
-                          {item.room}
-                        </div>
-                      </div>
+            {/* Days columns */}
+            {weekDays.map((day) => (
+              <div key={day} className="space-y-4">
+                <div className="h-12 flex items-center justify-center">
+                  <Badge variant={day === today ? "default" : "outline"} className="font-medium">
+                    {day}
+                  </Badge>
+                </div>
+                {timeSlots.map((time) => {
+                  const classItem = schedule[day]?.find(cls => cls.time.startsWith(time));
+                  
+                  return (
+                    <div key={time} className="h-16">
+                      {classItem && (
+                        <Card className={cn("h-full p-2 border", getSubjectColor(classItem.type))}>
+                          <div className="text-xs font-medium truncate">{classItem.subject}</div>
+                          <div className="text-xs text-muted-foreground truncate">
+                            {classItem.room}
+                          </div>
+                        </Card>
+                      )}
                     </div>
-                  </Card>
-                ))}
-              </CardContent>
-            </Card>
-          );
-        })}
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Schedule List - Mobile */}
+      <div className="md:hidden space-y-4">
+        {schedule[selectedDay]?.map((classItem, index) => (
+          <Card key={index} className={cn("border", getSubjectColor(classItem.type))}>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <Badge variant="outline" className="text-xs">
+                  {classItem.time}
+                </Badge>
+                <Badge className="text-xs capitalize">
+                  {classItem.type}
+                </Badge>
+              </div>
+              <h3 className="font-bold text-lg mb-1">{classItem.subject}</h3>
+              <div className="space-y-1 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <User className="h-3 w-3" />
+                  {classItem.teacher}
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-3 w-3" />
+                  Salle {classItem.room}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Today's Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-xl bg-primary/10">
+                <BookOpen className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Cours aujourd'hui</p>
+                <p className="text-2xl font-bold">{schedule[today]?.length || 0}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-xl bg-accent/10">
+                <Clock className="h-6 w-6 text-accent" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Heures de cours</p>
+                <p className="text-2xl font-bold">6h</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-xl bg-success/10">
+                <Users className="h-6 w-6 text-success" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Matières différentes</p>
+                <p className="text-2xl font-bold">5</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
