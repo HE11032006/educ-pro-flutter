@@ -38,11 +38,11 @@ export const Navigation = ({ activeSection, onSectionChange }: NavigationProps) 
   return (
     <>
       {/* Mobile Menu Button */}
-      <div className="fixed top-4 left-4 z-50 md:hidden">
+      <div className="fixed top-4 left-4 z-50 md:hidden safe-area-top">
         <Card className="p-2 bg-card/95 backdrop-blur-sm shadow-lg">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 rounded-lg hover:bg-secondary transition-colors"
+            className="p-3 rounded-lg hover:bg-secondary transition-colors mobile-optimized min-h-[44px] min-w-[44px] flex items-center justify-center"
           >
             {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -81,7 +81,7 @@ export const Navigation = ({ activeSection, onSectionChange }: NavigationProps) 
                       setIsOpen(false);
                     }}
                     className={cn(
-                      "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200",
+                      "w-full flex items-center gap-3 px-4 py-4 rounded-xl text-left transition-all duration-200 mobile-optimized min-h-[48px]",
                       isActive 
                         ? "bg-gradient-to-r from-primary/10 to-primary-glow/10 text-primary border border-primary/20" 
                         : "hover:bg-secondary text-muted-foreground hover:text-foreground"

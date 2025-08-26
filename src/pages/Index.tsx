@@ -39,14 +39,14 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20 mobile-optimized">
       <Navigation 
         activeSection={activeSection} 
         onSectionChange={setActiveSection} 
       />
       
       <main className="md:ml-64 transition-all duration-300">
-        <div className="p-4 md:p-8 pt-16 md:pt-8">
+        <div className="p-4 md:p-8 pt-16 md:pt-8 safe-area-top safe-area-bottom">
           {renderSection()}
         </div>
       </main>
