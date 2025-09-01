@@ -75,87 +75,96 @@ export const AttendanceSection = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Users className="h-8 w-8 text-primary" />
-            Présences
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Suivi de votre assiduité et de vos présences
-          </p>
-        </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="flex items-center gap-2">
-            <BarChart3 className="h-4 w-4" />
-            Graphiques
-          </Button>
-          <Button className="flex items-center gap-2">
-            <Calendar className="h-4 w-4" />
-            Justifier absence
-          </Button>
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-success/10 via-primary/5 to-accent/10 p-8 mb-8">
+        <div className="absolute inset-0 bg-gradient-to-r from-success/5 to-transparent"></div>
+        <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h1 className="text-4xl font-bold flex items-center gap-3 bg-gradient-to-r from-success to-primary bg-clip-text text-transparent">
+              <div className="p-3 rounded-xl bg-success/10 backdrop-blur-sm">
+                <Users className="h-8 w-8 text-success" />
+              </div>
+              Présences
+            </h1>
+            <p className="text-muted-foreground mt-2 text-lg">
+              Suivi de votre assiduité et de vos présences
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline" className="flex items-center gap-2 backdrop-blur-sm bg-background/80 border-primary/20 hover:bg-primary/10">
+              <BarChart3 className="h-4 w-4" />
+              Graphiques
+            </Button>
+            <Button className="flex items-center gap-2 bg-gradient-to-r from-success to-success/80 hover:shadow-lg hover:shadow-success/25 transition-all">
+              <Calendar className="h-4 w-4" />
+              Justifier absence
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="bg-gradient-to-br from-success/5 to-success/10 border-success/20">
-          <CardContent className="p-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <Card className="relative overflow-hidden bg-gradient-to-br from-success/5 via-success/10 to-success/15 border-success/20 hover:shadow-xl hover:shadow-success/20 transition-all duration-500 group">
+          <div className="absolute inset-0 bg-gradient-to-r from-success/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <CardContent className="p-6 relative">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Taux de présence</p>
-                <p className="text-3xl font-bold text-success">{monthlyStats.attendanceRate}%</p>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Taux de présence</p>
+                <p className="text-4xl font-bold text-success mb-2">{monthlyStats.attendanceRate}<span className="text-lg text-muted-foreground">%</span></p>
                 <p className="text-sm text-success font-medium flex items-center gap-1">
                   <TrendingUp className="h-3 w-3" />
                   +2% ce mois
                 </p>
               </div>
-              <div className="p-3 rounded-xl bg-success/10">
-                <CheckCircle className="h-6 w-6 text-success" />
+              <div className="p-4 rounded-2xl bg-success/10 group-hover:bg-success/20 transition-colors group-hover:scale-110 transform duration-300">
+                <CheckCircle className="h-8 w-8 text-success" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-6">
+        <Card className="relative overflow-hidden hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 group">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <CardContent className="p-6 relative">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Cours présents</p>
-                <p className="text-3xl font-bold">{monthlyStats.present}</p>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Cours présents</p>
+                <p className="text-3xl font-bold mb-1">{monthlyStats.present}</p>
                 <p className="text-sm text-muted-foreground">sur {monthlyStats.totalCourses}</p>
               </div>
-              <div className="p-3 rounded-xl bg-primary/10">
+              <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
                 <Users className="h-6 w-6 text-primary" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-6">
+        <Card className="relative overflow-hidden hover:shadow-lg hover:shadow-destructive/10 transition-all duration-300 group">
+          <div className="absolute inset-0 bg-gradient-to-r from-destructive/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <CardContent className="p-6 relative">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Absences</p>
-                <p className="text-3xl font-bold text-destructive">{monthlyStats.absent}</p>
-                <p className="text-sm text-muted-foreground">ce mois</p>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Absences</p>
+                <p className="text-3xl font-bold text-destructive mb-1">{monthlyStats.absent}</p>
+                <p className="text-sm text-destructive/70">ce mois</p>
               </div>
-              <div className="p-3 rounded-xl bg-destructive/10">
+              <div className="p-3 rounded-xl bg-destructive/10 group-hover:bg-destructive/20 transition-colors">
                 <XCircle className="h-6 w-6 text-destructive" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-6">
+        <Card className="relative overflow-hidden hover:shadow-lg hover:shadow-warning/10 transition-all duration-300 group">
+          <div className="absolute inset-0 bg-gradient-to-r from-warning/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <CardContent className="p-6 relative">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Retards</p>
-                <p className="text-3xl font-bold text-warning">{monthlyStats.late}</p>
-                <p className="text-sm text-muted-foreground">ce mois</p>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Retards</p>
+                <p className="text-3xl font-bold text-warning mb-1">{monthlyStats.late}</p>
+                <p className="text-sm text-warning/70">ce mois</p>
               </div>
-              <div className="p-3 rounded-xl bg-warning/10">
+              <div className="p-3 rounded-xl bg-warning/10 group-hover:bg-warning/20 transition-colors">
                 <AlertTriangle className="h-6 w-6 text-warning" />
               </div>
             </div>
@@ -165,9 +174,14 @@ export const AttendanceSection = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Attendance Progress */}
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle>Objectif de présence</CardTitle>
+        <Card className="lg:col-span-1 backdrop-blur-sm bg-card/90 border-success/10 hover:shadow-lg hover:shadow-success/10 transition-all duration-300">
+          <CardHeader className="border-b border-border/50">
+            <CardTitle className="flex items-center gap-2">
+              <div className="p-2 rounded-lg bg-success/10">
+                <TrendingUp className="h-4 w-4 text-success" />
+              </div>
+              Objectif de présence
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="text-center">
@@ -214,10 +228,15 @@ export const AttendanceSection = () => {
         </Card>
 
         {/* Recent Attendance */}
-        <Card className="lg:col-span-2">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Présences récentes</CardTitle>
-            <Badge variant="outline">{attendanceData.length} cours</Badge>
+        <Card className="lg:col-span-2 backdrop-blur-sm bg-card/90 border-primary/10">
+          <CardHeader className="flex flex-row items-center justify-between border-b border-border/50">
+            <CardTitle className="flex items-center gap-2">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Clock className="h-4 w-4 text-primary" />
+              </div>
+              Présences récentes
+            </CardTitle>
+            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">{attendanceData.length} cours</Badge>
           </CardHeader>
           <CardContent className="space-y-4">
             {attendanceData.slice(0, 6).map((record, index) => (
