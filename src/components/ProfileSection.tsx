@@ -109,53 +109,58 @@ export const ProfileSection = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <User className="h-8 w-8 text-primary" />
-            Mon Profil
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Gérez vos informations personnelles et préférences
-          </p>
-        </div>
-        <div className="flex gap-3">
-          {isEditing ? (
-            <>
-              <Button variant="outline" onClick={() => setIsEditing(false)}>
-                <X className="h-4 w-4 mr-2" />
-                Annuler
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-accent/10 via-primary/5 to-success/10 p-8 mb-8">
+        <div className="absolute inset-0 bg-gradient-to-r from-accent/5 to-transparent"></div>
+        <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h1 className="text-4xl font-bold flex items-center gap-3 bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">
+              <div className="p-3 rounded-xl bg-accent/10 backdrop-blur-sm">
+                <User className="h-8 w-8 text-accent" />
+              </div>
+              Mon Profil
+            </h1>
+            <p className="text-muted-foreground mt-2 text-lg">
+              Gérez vos informations personnelles et préférences
+            </p>
+          </div>
+          <div className="flex gap-3">
+            {isEditing ? (
+              <>
+                <Button variant="outline" onClick={() => setIsEditing(false)} className="backdrop-blur-sm bg-background/80 border-destructive/20 hover:bg-destructive/10">
+                  <X className="h-4 w-4 mr-2" />
+                  Annuler
+                </Button>
+                <Button onClick={handleSave} className="bg-gradient-to-r from-success to-success/80 hover:shadow-lg hover:shadow-success/25 transition-all">
+                  <Save className="h-4 w-4 mr-2" />
+                  Enregistrer
+                </Button>
+              </>
+            ) : (
+              <Button onClick={() => setIsEditing(true)} className="bg-gradient-to-r from-accent to-accent/80 hover:shadow-lg hover:shadow-accent/25 transition-all">
+                <Edit className="h-4 w-4 mr-2" />
+                Modifier
               </Button>
-              <Button onClick={handleSave}>
-                <Save className="h-4 w-4 mr-2" />
-                Enregistrer
-              </Button>
-            </>
-          ) : (
-            <Button onClick={() => setIsEditing(true)}>
-              <Edit className="h-4 w-4 mr-2" />
-              Modifier
-            </Button>
-          )}
+            )}
+          </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Profile Summary */}
-        <Card className="lg:col-span-1">
+        <Card className="lg:col-span-1 backdrop-blur-sm bg-card/90 border-primary/10 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300">
           <CardHeader className="text-center">
             <div className="relative mx-auto">
-              <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center text-2xl font-bold text-primary mx-auto mb-4">
+              <div className="w-28 h-28 bg-gradient-to-br from-accent/20 to-primary/20 rounded-full flex items-center justify-center text-3xl font-bold text-primary mx-auto mb-4 shadow-lg hover:shadow-xl hover:shadow-primary/20 transition-all duration-300">
                 {profileData.personalInfo.firstName[0]}{profileData.personalInfo.lastName[0]}
               </div>
-              <Button size="sm" variant="outline" className="absolute -bottom-2 -right-2 rounded-full w-8 h-8 p-0">
+              <Button size="sm" variant="outline" className="absolute -bottom-2 -right-2 rounded-full w-10 h-10 p-0 bg-accent/10 border-accent/30 hover:bg-accent/20 hover:scale-110 transition-all">
                 <Camera className="h-4 w-4" />
               </Button>
             </div>
-            <CardTitle className="text-xl">
+            <CardTitle className="text-2xl bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">
               {profileData.personalInfo.firstName} {profileData.personalInfo.lastName}
             </CardTitle>
-            <p className="text-muted-foreground">{profileData.academic.level}</p>
+            <p className="text-muted-foreground text-lg">{profileData.academic.level}</p>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="text-center">

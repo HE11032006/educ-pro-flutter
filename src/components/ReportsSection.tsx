@@ -98,42 +98,48 @@ export const ReportsSection = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <FileText className="h-8 w-8 text-primary" />
-            Bulletins scolaires
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Consultez et téléchargez vos bulletins de notes
-          </p>
-        </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="flex items-center gap-2">
-            <BarChart3 className="h-4 w-4" />
-            Graphiques
-          </Button>
-          <Button className="flex items-center gap-2">
-            <Download className="h-4 w-4" />
-            Télécharger tout
-          </Button>
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-success/10 via-primary/5 to-warning/10 p-8 mb-8">
+        <div className="absolute inset-0 bg-gradient-to-r from-success/5 to-transparent"></div>
+        <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h1 className="text-4xl font-bold flex items-center gap-3 bg-gradient-to-r from-success to-primary bg-clip-text text-transparent">
+              <div className="p-3 rounded-xl bg-success/10 backdrop-blur-sm">
+                <FileText className="h-8 w-8 text-success" />
+              </div>
+              Bulletins scolaires
+            </h1>
+            <p className="text-muted-foreground mt-2 text-lg">
+              Consultez et téléchargez vos bulletins de notes
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline" className="flex items-center gap-2 backdrop-blur-sm bg-background/80 border-primary/20 hover:bg-primary/10">
+              <BarChart3 className="h-4 w-4" />
+              Graphiques
+            </Button>
+            <Button className="flex items-center gap-2 bg-gradient-to-r from-success to-success/80 hover:shadow-lg hover:shadow-success/25 transition-all">
+              <Download className="h-4 w-4" />
+              Télécharger tout
+            </Button>
+          </div>
         </div>
       </div>
 
       {currentBulletin && (
         <>
           {/* Current Bulletin Overview */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
-              <CardContent className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <Card className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-primary/10 to-primary-glow/10 border-primary/20 hover:shadow-xl hover:shadow-primary/20 transition-all duration-500 group">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <CardContent className="p-6 relative">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Moyenne générale</p>
-                    <p className="text-3xl font-bold text-primary">{currentBulletin.averageGeneral}/20</p>
-                    <Badge className="mt-2">{getMention(currentBulletin.averageGeneral!)}</Badge>
+                    <p className="text-sm font-medium text-muted-foreground mb-1">Moyenne générale</p>
+                    <p className="text-4xl font-bold text-primary mb-2">{currentBulletin.averageGeneral}<span className="text-lg text-muted-foreground">/20</span></p>
+                    <Badge className="bg-gradient-to-r from-primary/10 to-primary/20 text-primary border-primary/30">{getMention(currentBulletin.averageGeneral!)}</Badge>
                   </div>
-                  <div className="p-3 rounded-xl bg-primary/10">
-                    <Star className="h-6 w-6 text-primary" />
+                  <div className="p-4 rounded-2xl bg-primary/10 group-hover:bg-primary/20 transition-colors group-hover:scale-110 transform duration-300">
+                    <Star className="h-8 w-8 text-primary" />
                   </div>
                 </div>
               </CardContent>

@@ -172,84 +172,97 @@ export const AnnouncementsSection = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Megaphone className="h-8 w-8 text-primary" />
-            Annonces
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Restez informé des dernières actualités et informations importantes
-          </p>
-        </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="flex items-center gap-2">
-            <Bell className="h-4 w-4" />
-            Notifications
-          </Button>
-          <Button 
-            variant={showUnreadOnly ? "default" : "outline"}
-            onClick={() => setShowUnreadOnly(!showUnreadOnly)}
-            className="flex items-center gap-2"
-          >
-            <Eye className="h-4 w-4" />
-            {showUnreadOnly ? "Toutes" : "Non lues"}
-          </Button>
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary/10 via-accent/10 to-warning/10 p-8 mb-8">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent"></div>
+        <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h1 className="text-4xl font-bold flex items-center gap-3 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              <div className="p-3 rounded-xl bg-primary/10 backdrop-blur-sm">
+                <Megaphone className="h-8 w-8 text-primary" />
+              </div>
+              Annonces
+            </h1>
+            <p className="text-muted-foreground mt-2 text-lg">
+              Restez informé des dernières actualités et informations importantes
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline" className="flex items-center gap-2 backdrop-blur-sm bg-background/80 border-primary/20 hover:bg-primary/10">
+              <Bell className="h-4 w-4" />
+              Notifications
+            </Button>
+            <Button 
+              variant={showUnreadOnly ? "default" : "outline"}
+              onClick={() => setShowUnreadOnly(!showUnreadOnly)}
+              className="flex items-center gap-2 backdrop-blur-sm"
+            >
+              <Eye className="h-4 w-4" />
+              {showUnreadOnly ? "Toutes" : "Non lues"}
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
-          <CardContent className="p-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <Card className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-primary/10 to-primary-glow/10 border-primary/20 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 group">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <CardContent className="p-6 relative">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total annonces</p>
-                <p className="text-3xl font-bold text-primary">{announcements.length}</p>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Total annonces</p>
+                <p className="text-3xl font-bold text-primary mb-1">{announcements.length}</p>
+                <p className="text-xs text-primary/70">Cette semaine</p>
               </div>
-              <div className="p-3 rounded-xl bg-primary/10">
+              <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
                 <Megaphone className="h-6 w-6 text-primary" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-6">
+        <Card className="relative overflow-hidden hover:shadow-lg hover:shadow-warning/10 transition-all duration-300 group">
+          <div className="absolute inset-0 bg-gradient-to-r from-warning/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <CardContent className="p-6 relative">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Non lues</p>
-                <p className="text-3xl font-bold text-warning">{unreadCount}</p>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Non lues</p>
+                <p className="text-3xl font-bold text-warning mb-1">{unreadCount}</p>
+                <p className="text-xs text-warning/70">Nécessitent attention</p>
               </div>
-              <div className="p-3 rounded-xl bg-warning/10">
+              <div className="p-3 rounded-xl bg-warning/10 group-hover:bg-warning/20 transition-colors">
                 <Bell className="h-6 w-6 text-warning" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-6">
+        <Card className="relative overflow-hidden hover:shadow-lg hover:shadow-accent/10 transition-all duration-300 group">
+          <div className="absolute inset-0 bg-gradient-to-r from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <CardContent className="p-6 relative">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Épinglées</p>
-                <p className="text-3xl font-bold text-accent">{pinnedCount}</p>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Épinglées</p>
+                <p className="text-3xl font-bold text-accent mb-1">{pinnedCount}</p>
+                <p className="text-xs text-accent/70">Importantes</p>
               </div>
-              <div className="p-3 rounded-xl bg-accent/10">
+              <div className="p-3 rounded-xl bg-accent/10 group-hover:bg-accent/20 transition-colors">
                 <Pin className="h-6 w-6 text-accent" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-6">
+        <Card className="relative overflow-hidden hover:shadow-lg hover:shadow-destructive/10 transition-all duration-300 group">
+          <div className="absolute inset-0 bg-gradient-to-r from-destructive/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <CardContent className="p-6 relative">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Urgentes</p>
-                <p className="text-3xl font-bold text-destructive">{urgentCount}</p>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Urgentes</p>
+                <p className="text-3xl font-bold text-destructive mb-1">{urgentCount}</p>
+                <p className="text-xs text-destructive/70">Action immédiate</p>
               </div>
-              <div className="p-3 rounded-xl bg-destructive/10">
+              <div className="p-3 rounded-xl bg-destructive/10 group-hover:bg-destructive/20 transition-colors">
                 <AlertTriangle className="h-6 w-6 text-destructive" />
               </div>
             </div>
@@ -258,18 +271,20 @@ export const AnnouncementsSection = () => {
       </div>
 
       {/* Filters */}
-      <Card>
+      <Card className="backdrop-blur-sm bg-card/80 border-primary/10">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row gap-4 items-center">
             <div className="flex items-center gap-2">
-              <Filter className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">Filtres:</span>
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Filter className="h-4 w-4 text-primary" />
+              </div>
+              <span className="text-sm font-medium text-foreground">Filtres:</span>
             </div>
             <div className="flex gap-3 flex-wrap">
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-3 py-2 rounded-md border border-input bg-background text-sm"
+                className="px-4 py-2 rounded-lg border border-input bg-background/80 text-sm hover:border-primary/50 focus:border-primary transition-colors backdrop-blur-sm"
               >
                 {categories.map(category => (
                   <option key={category} value={category}>{category}</option>
@@ -278,7 +293,7 @@ export const AnnouncementsSection = () => {
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
-                className="px-3 py-2 rounded-md border border-input bg-background text-sm"
+                className="px-4 py-2 rounded-lg border border-input bg-background/80 text-sm hover:border-primary/50 focus:border-primary transition-colors backdrop-blur-sm"
               >
                 {types.map(type => (
                   <option key={type} value={type}>

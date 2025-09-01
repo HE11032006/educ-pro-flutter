@@ -143,25 +143,30 @@ export const MessagesSection = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <MessageCircle className="h-8 w-8 text-primary" />
-            Messages
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Communiquez avec vos professeurs et l'administration
-          </p>
-        </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="flex items-center gap-2">
-            <Archive className="h-4 w-4" />
-            Archivés
-          </Button>
-          <Button className="flex items-center gap-2">
-            <Send className="h-4 w-4" />
-            Nouveau message
-          </Button>
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary/10 via-accent/5 to-success/10 p-8 mb-8">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent"></div>
+        <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h1 className="text-4xl font-bold flex items-center gap-3 bg-gradient-to-r from-primary to-success bg-clip-text text-transparent">
+              <div className="p-3 rounded-xl bg-primary/10 backdrop-blur-sm">
+                <MessageCircle className="h-8 w-8 text-primary" />
+              </div>
+              Messages
+            </h1>
+            <p className="text-muted-foreground mt-2 text-lg">
+              Communiquez avec vos professeurs et l'administration
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline" className="flex items-center gap-2 backdrop-blur-sm bg-background/80 border-primary/20 hover:bg-primary/10">
+              <Archive className="h-4 w-4" />
+              Archivés
+            </Button>
+            <Button className="flex items-center gap-2 bg-gradient-to-r from-primary to-primary-glow hover:shadow-lg hover:shadow-primary/25 transition-all">
+              <Send className="h-4 w-4" />
+              Nouveau message
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -227,15 +232,15 @@ export const MessagesSection = () => {
       {/* Messages Interface */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[600px]">
         {/* Conversations List */}
-        <Card className="lg:col-span-1">
-          <CardHeader className="pb-3">
+        <Card className="lg:col-span-1 backdrop-blur-sm bg-card/90 border-primary/10">
+          <CardHeader className="pb-3 border-b border-border/50">
             <div className="relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Rechercher une conversation..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                className="pl-10 bg-background/80 border-primary/20 focus:border-primary/50 transition-colors"
               />
             </div>
           </CardHeader>
@@ -279,36 +284,39 @@ export const MessagesSection = () => {
         </Card>
 
         {/* Chat Area */}
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-2 backdrop-blur-sm bg-card/90 border-primary/10">
           {selectedConversation ? (
             <>
               {/* Chat Header */}
-              <CardHeader className="border-b">
+              <CardHeader className="border-b border-border/50 bg-gradient-to-r from-primary/5 to-transparent">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="relative">
-                      <div className={`w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-sm font-medium ${
-                        selectedConversation.online ? 'ring-2 ring-success' : ''
+                      <div className={`w-12 h-12 rounded-full bg-gradient-to-br from-primary/10 to-primary/20 flex items-center justify-center text-sm font-medium ${
+                        selectedConversation.online ? 'ring-2 ring-success shadow-lg shadow-success/20' : ''
                       }`}>
                         {selectedConversation.avatar}
                       </div>
                       {selectedConversation.online && (
-                        <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-success rounded-full border-2 border-background"></div>
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-success rounded-full border-2 border-background animate-pulse"></div>
                       )}
                     </div>
                     <div>
-                      <p className="font-medium">{selectedConversation.name}</p>
+                      <p className="font-semibold text-lg">{selectedConversation.name}</p>
                       <p className="text-sm text-muted-foreground">{selectedConversation.role}</p>
                       {selectedConversation.online && (
-                        <p className="text-xs text-success">En ligne</p>
+                        <div className="flex items-center gap-1">
+                          <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
+                          <p className="text-xs text-success font-medium">En ligne</p>
+                        </div>
                       )}
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline">
+                    <Button size="sm" variant="outline" className="hover:bg-warning/10 hover:border-warning/30">
                       <Star className="h-4 w-4" />
                     </Button>
-                    <Button size="sm" variant="outline">
+                    <Button size="sm" variant="outline" className="hover:bg-accent/10 hover:border-accent/30">
                       <Archive className="h-4 w-4" />
                     </Button>
                   </div>
